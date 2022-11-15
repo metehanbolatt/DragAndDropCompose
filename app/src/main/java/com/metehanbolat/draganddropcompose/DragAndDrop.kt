@@ -19,6 +19,7 @@ internal val LocalDragTargetInfo = compositionLocalOf { DragTargetInfo() }
 fun <T> DragTarget(
     modifier: Modifier = Modifier,
     dataToDrop: T,
+    viewModel: MainViewModel,
     content: @Composable (() -> Unit)
 ) {
     var currentPosition by remember { mutableStateOf(Offset.Zero) }
@@ -30,7 +31,7 @@ fun <T> DragTarget(
             .pointerInput(Unit) {
                 detectDragGestures(
                     onDragStart = {
-                        // viewModel.startDragging()
+                        viewModel.startDragging()
                         currentState.dataToDrop = dataToDrop
                         currentState.isDragging = true
                         currentState.dragPosition = currentPosition + it
@@ -41,12 +42,12 @@ fun <T> DragTarget(
                         currentState.dragOffset += Offset(dragAmount.x, dragAmount.y)
                     },
                     onDragEnd = {
-                        // viewModel.stopDragging()
+                        viewModel.stopDragging()
                         currentState.dragOffset = Offset.Zero
                         currentState.isDragging = false
                     },
                     onDragCancel = {
-                        // viewModel.stopDragging()
+                        viewModel.stopDragging()
                         currentState.dragOffset = Offset.Zero
                         currentState.isDragging = false
                     }
